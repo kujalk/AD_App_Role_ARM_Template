@@ -6,7 +6,7 @@ To use this template, follow these steps:
 
 1. Clone or download the repository to your local machine.
 
-2. Open the `azuredeploy.json` file in a text editor or integrated development environment (IDE).
+2. Open the `ARM_Template.json` file in a text editor or integrated development environment (IDE).
 
 3. Customize the parameter values as needed, including the roleName, AppName, roleNameGuid, and roleAssignmentGuid.
 
