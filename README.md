@@ -13,6 +13,7 @@ To use this template, follow these steps:
 4. Save the azuredeploy.json file.
 
 5. Open the Azure Portal and navigate to the subscription or resource group where you want to deploy the custom role definition and role assignment.
+
 6. Click on "Deploy a custom template" and select the azuredeploy.json file from your local machine.
 
 7.Follow the prompts to complete the deployment process.
