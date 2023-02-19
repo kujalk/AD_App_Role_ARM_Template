@@ -1,12 +1,14 @@
-# AD_App_Role_ARM_Template
+# Deploying Custom Role Definition and Role Assignment with Azure ARM Template
 This is an Azure ARM template that can be used to deploy a custom role definition and role assignment to an Azure subscription or resource group.
 
-## How to Use
+# How to Use
 To use this template, follow these steps:
 
-Clone or download the repository to your local machine.
-Open the azuredeploy.json file in a text editor or integrated development environment (IDE).
-Customize the parameter values as needed, including the roleName, AppName, roleNameGuid, and roleAssignmentGuid.
+1. Clone or download the repository to your local machine.
+
+2. Open the `azuredeploy.json` file in a text editor or integrated development environment (IDE).
+
+3. Customize the parameter values as needed, including the roleName, AppName, roleNameGuid, and roleAssignmentGuid.
 Save the azuredeploy.json file.
 Open the Azure Portal and navigate to the subscription or resource group where you want to deploy the custom role definition and role assignment.
 Click on "Deploy a custom template" and select the azuredeploy.json file from your local machine.
