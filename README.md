@@ -21,15 +21,20 @@ To use this template, follow these steps:
 This ARM template has the following parameters:
 
 . `roleName`: The name of the custom role.
+
 . `AppName`: The Azure App name.
+
 . `roleNameGuid`: A new GUID used to identify the role definition resource.
+
 . `roleAssignmentGuid`: A new GUID used to identify the role assignment resource.
 
 ## Resources
 This ARM template creates the following resources:
 
 `Microsoft.Resources/deploymentScripts`: A deployment script that runs a PowerShell command to retrieve the service principal ID for the specified Azure App.
+
 `Microsoft.Authorization/roleDefinitions`: A custom role definition that grants read permissions.
+
 `Microsoft.Authorization/roleAssignments`: A role assignment that assigns the custom role to the service principal ID retrieved by the deployment script.
 
 
