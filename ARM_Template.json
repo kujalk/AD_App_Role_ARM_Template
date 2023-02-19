@@ -1,0 +1,92 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "roleName": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of the custom role."
+            }
+        },
+        "AppName": {
+            "defaultValue": "\\\"Your app Name\\\"",
+            "type": "String",
+            "metadata": {
+                "description": "The Azure App Name"
+            }
+        },
+        "roleNameGuid": {
+            "defaultValue": "[newGuid()]",
+            "type": "String",
+            "metadata": {
+                "description": "A new GUID used to identify the role assignment"
+            }
+        },
+        "roleAssignmentGuid": {
+            "defaultValue": "[newGuid()]",
+            "type": "String",
+            "metadata": {
+                "description": "A new GUID used to identify the role assignment"
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2020-10-01",
+            "name": "runPowerShellInlineWithOutput",
+            "location": "[resourceGroup().location]",
+            "kind": "AzurePowerShell",
+            "identity": {
+                "type": "userAssigned",
+                "userAssignedIdentities": {
+                    "/subscriptions/xxxxx/resourcegroups/xxxxxx/providers/Microsoft.ManagedIdentity/userAssignedIdentities/xxxxx": {}
+                }
+            },
+            "properties": {
+                "azPowerShellVersion": "8.3",
+                "scriptContent": "param([string] $AppName)\n $output = (Get-AzADServicePrincipal -DisplayName $AppName).ID \n Write-Output $output \n $DeploymentScriptOutputs = @{} \n$DeploymentScriptOutputs['text'] = $output",
+                "arguments": "[concat('-AppName', ' ', parameters('AppName'))]",
+                "timeout": "PT1H",
+                "cleanupPreference": "OnSuccess",
+                "retentionInterval": "P1D"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleDefinitions",
+            "apiVersion": "2018-01-01-preview",
+            "name": "[parameters('roleNameGuid')]",
+            "properties": {
+                "roleName": "[parameters('roleName')]",
+                "description": "Custom role with read permissions",
+                "type": "CustomRole",
+                "assignableScopes": [
+                    "[subscription().id]",
+                    "[resourceGroup().id]"
+                ],
+                "permissions": [
+                    {
+                        "actions": [
+                            "*"
+                        ],
+                        "notActions": [],
+                        "dataActions": [],
+                        "notDataActions": []
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2020-08-01-preview",
+            "name": "[parameters('roleAssignmentGuid')]",
+            "dependsOn": [
+                "[parameters('roleNameGuid')]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', parameters('roleNameGuid'))]",
+                "principalId": "[reference('runPowerShellInlineWithOutput').outputs.text]"
+            }
+        }
+    ]
+}
